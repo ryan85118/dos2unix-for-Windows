@@ -1,4 +1,4 @@
-# dos2unix
+# dos2unix-for-Windows
 
 > Based off https://sourceforge.net/projects/dos2unix/
 
