@@ -1,14 +1,22 @@
-[string[]]$Excludes = @('*node_modules*')
-foreach ( $file in dir -include ('*.php', '*.htm', '*.html', '*.css', '*.js', '*.jsx', '*.ts', '*.tsx') -exclude $Excludes -recurse)
-{
-        $allowed = $true
-        foreach ($exclude in $Excludes) { 
-            if ((Split-Path $file.FullName -Parent) -ilike $exclude) { 
-                $allowed = $false
-                break
-            }
-        }
-        if ($allowed) {
-            .\dos2unix.exe $file.FullName
-        }
+Param ([string] $Path)
+
+Write-Host "Script Start"
+
+if (!$Path) { 
+    Write-Host "Path is null" 
+    Write-Host "Executing exit command"
+    exit
 }
+
+[string[]]$Excludes = @('*node_modules*')
+[string[]]$Include = @('*.php', '*.htm', '*.html', '*.css', '*.js', '*.jsx', '*.ts', '*.tsx')
+
+Write-Output "dos2unix start: $Path"
+
+$Files = @(Get-ChildItem -Path $Path -Exclude $Excludes | Get-ChildItem -Include $Include -Recurse)
+
+ForEach ($file in $Files) {
+    ./src/dos2unix.exe $file.FullName
+}
+
+Write-Host "Script End"
